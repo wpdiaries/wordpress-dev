@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+
+  wordpress:
+    container_name: wordpress-test1
+    restart: always
+    image: wordpress:6.4.3-php8.3-apache
+
+    ports:
+      - "80:80"
+
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: test1
+      WORDPRESS_DB_USER: mydbuser
+      WORDPRESS_DB_PASSWORD: mydbpassword
+
+    depends_on:
+      - db
+
+    volumes:
+      - /opt/projects/test1/www:/var/www/html
+
+    extra_hosts:
+      - "test1.com:192.168.1.88"
+      - "www.test1.com:192.168.1.88"
+
+  db:
+    container_name: mysql-test1
+    image: mysql:8.2.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+
+    ports:
+      -  "3306:3306"
+
+    environment:
+      MYSQL_ROOT_PASSWORD: mydbrootpassword
+      MYSQL_DATABASE: test1
+      MYSQL_USER: mydbuser
+      MYSQL_PASSWORD: mydbpassword
+      #MYSQL_RANDOM_ROOT_PASSWORD: '1'
+
+    volumes:
+      - /opt/projects_local/test1/mysql:/var/lib/mysql
+      # To load a mysql dump (anyname.sql.gz):
+      - /opt/projects/test1/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
