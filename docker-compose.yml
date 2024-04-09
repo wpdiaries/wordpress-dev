@@ -5,7 +5,7 @@ services:
   wordpress:
     container_name: wordpress-test1
     restart: always
-    image: wordpress:6.4.3-php8.3-apache
+    image: wordpress:6.5.0-php8.3-apache
 
     ports:
       - "80:80"
